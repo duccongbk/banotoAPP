@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Information</title>
+    <link rel="stylesheet" href="/public/css/showCarInfo.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container-wrapper">
+        <div class="container" id="car-list">
+            <div class="car-card">
+                <div class="car-images"></div>
+                <div class="like-dislike-container">
+                    <button class="like-btn" id="like-btn">Like</button>
+                    <button class="dislike-btn" id="dislike-btn">Dislike</button>
+                    <p class="like-count">0 Likes</p>
+                    <p class="dislike-count">0 Dislikes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="comment-form" id="comment-form">
+            <form class="form_user_comment" id="form_user_comment">
+                <div class="comment_User" id="comment_User">
+                    <ul>
+
+
+                    </ul>
+                </div>
+                <textarea name="comment" id="comment" placeholder="Write your comment here..." required></textarea>
+                <input type="file" id="imageUpload" style="display: none;" accept="image/*" multiple>
+                <button type="button" id="uploadImageButton" class="uploadImageButton">📷</button>
+                <div id="previewContainer"></div>
+                <button type="submit" id="btn_Comment">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="/public/js/showCarInfo.js"></script>
+</body>
+
+</html>

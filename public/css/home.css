@@ -1,0 +1,159 @@
+.top-container {
+    width: 100%;
+    height: 200px;
+    background-color: #ff7f00;
+    /* Màu cam */
+    padding: 10px;
+    /* Thêm padding để tạo khoảng trắng xung quanh nội dung */
+    max-width: 100%;
+    max-height: 500px;
+    position: relative;
+    /* Đặt position là relative để có thể điều chỉnh vị trí của các phần tử con */
+}
+
+.user-info {
+    width: 100px;
+    height: 100px;
+    border: 5px solid #3fee1c;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    /* Đặt position là absolute để có thể điều chỉnh vị trí */
+    top: 10px;
+    /* Đặt top là 10px để nằm gần phía trên */
+    right: 10px;
+    /* Đặt right là 10px để nằm gần phía bên phải */
+}
+
+.avatar {
+    border-radius: 50%;
+}
+
+.search-bar {
+    /* background-color: #fff; */
+    align-items: flex-end;
+    display: flex;
+    /* border: 5px solid #3fee1c; */
+    width: 1500px;
+    height: 20px;
+    position: absolute;
+    /* Đặt position là absolute để có thể điều chỉnh vị trí */
+    bottom: 10px;
+    /* Đặt bottom là 10px để nằm gần phía dưới */
+    right: 200px;
+    /* Đặt right là 10px để nằm gần phía bên phải */
+}
+
+.inputtext {
+    width: 30%;
+}
+
+.btnSearch,
+.menu-select-hangxe {
+    margin-left: 10px;
+
+}
+
+.menu-select {
+    /* border: 1px solid #3fee1c;
+    background-color: bisque; */
+    margin-left: 10px;
+    height: 100%;
+}
+
+.bottom-container {
+    background-color: #ff7f00;
+    /* Màu cam */
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+    margin: 10px auto;
+    /* Canh giữa theo chiều ngang */
+    max-width: 1500px;
+    /* Độ rộng tối đa của container */
+}
+
+.car {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid #c99861;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.car img {
+    width: 100%;
+    /* Ảnh sẽ căn chiều rộng của phần tử cha */
+    height: auto;
+}
+
+.car button {
+    margin-top: 5px;
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination button {
+    margin: 0 5px;
+    /* Khoảng cách giữa các nút */
+}
+
+.p-price {
+    color: #f30f66;
+    font-weight: bold;
+
+}
+
+.p-hang {
+    color: #007bff;
+    /* Màu chữ */
+    font-weight: bold;
+    text-decoration: underline;
+    /* Độ đậm của chữ */
+}
+.p-diachi {
+    color: #007bff;
+    /* Màu chữ */
+    font-weight: bold;
+    /* Độ đậm của chữ */
+}
+.p-year {
+    color: #031d38;
+    /* Màu chữ */
+    font-weight: bold;
+    /* Độ đậm của chữ */
+}
+.active-page {
+    background-color: #007bff;
+    /* Màu xanh */
+    color: #fff;
+    /* Màu chữ trắng */
+}
+
+h3 {
+    color: blue;
+    /* Màu xanh */
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    color: red;
+    /* Màu đỏ */
+    justify-content: center;
+
+}
