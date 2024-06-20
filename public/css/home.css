@@ -49,7 +49,7 @@
 }
 
 .btnSearch,
-.menu-select-hangxe {
+.menu-select-hangxe,.menu-select-diachi {
     margin-left: 10px;
 
 }
@@ -115,7 +115,7 @@
 .p-price {
     color: #f30f66;
     font-weight: bold;
-
+    font-size: larger;
 }
 
 .p-hang {
@@ -126,13 +126,21 @@
     /* Độ đậm của chữ */
 }
 .p-diachi {
-    color: #007bff;
+    color: #3a0e14;
     /* Màu chữ */
     font-weight: bold;
     /* Độ đậm của chữ */
 }
+.p-time {
+    color: #0e3a12;
+    font-size: smaller;
+    /* Màu chữ */
+    font-weight: lighter;
+    /* Độ đậm của chữ */
+}
 .p-year {
     color: #031d38;
+    font-size: large;
     /* Màu chữ */
     font-weight: bold;
     /* Độ đậm của chữ */

@@ -9,6 +9,8 @@ const dongcoSelect = document.getElementById('dongco');
 const sokm = document.getElementById('sokm');
 const mausacSelect = document.getElementById('mausac');
 const diachi = document.getElementById('diachi');
+var province = '';
+var district = '';
 // Xác định phạm vi năm bạn muốn cung cấp
 const startYear = currentYear - 50; // Ví dụ: từ năm 50 năm trước đến năm nay
 let selectedImages = [];
@@ -88,13 +90,15 @@ function populateProvinceOptions(data) {
     // var province_id = null;
     var provinceSelect = document.getElementById('optionprovince');
     provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+    const provincesMap = {};
 
     data.forEach(items => {
         provinceSelect.innerHTML += `<option value="${items.province.id}">${items.province.name}</option>`;
-        province_id = items.province.id;
+        provincesMap[items.province.id] = items.province.name;
     });
-    provinceSelect.addEventListener('change', function () {
+    provinceSelect.addEventListener('click', function () {
         var province_id = provinceSelect.value;
+        province = provincesMap[province_id];
         if (province_id) {
             fetchDistrictsByProvinceId(province_id);
         } else {
@@ -103,7 +107,6 @@ function populateProvinceOptions(data) {
         }
     });
 }
-
 function fetchDistrictsByProvinceId(provinceId) {
     const url = `/address/provinceId`; // Đảm bảo endpoint /address/provinceId tồn tại
 
@@ -132,11 +135,17 @@ function fetchDistrictsByProvinceId(provinceId) {
 
 
 function updateDistrictOptions(districts) {
+    const districtsMap = {};
     var districtSelect = document.getElementById('optionaddress');
     districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
 
     districts.forEach(district => {
-        districtSelect.innerHTML += `<option value="${district.level2_id}">${district.name}</option>`;
+        districtSelect.innerHTML += `<option value="${district.id}">${district.name}</option>`;
+        districtsMap[district.id] = district.name;
+    });
+    districtSelect.addEventListener('click', function () {
+        var district_id = districtSelect.value;
+        district = districtsMap[district_id];
     });
 }
 
@@ -267,7 +276,8 @@ function submitForm() {
     const dongcoSelect = document.getElementById('dongco').value.trim();
     const sokmInput = document.getElementById('sokm').value.trim();
     const mausacSelect = document.getElementById('mausac').value.trim();
-    const diachiInput = document.getElementById('diachi').value.trim();
+    // const diachiProvince = document.getElementById('optionprovince').value.trim();
+    // const diachiDicSttric = document.getElementById('optionaddress').value.trim();
 
     // Kiểm tra điều kiện trước khi gửi POST
     if (!carnameInput || !automakerInput || !priceInput || !descriptionInput || selectedImages.length !== 7) {
@@ -289,7 +299,7 @@ function submitForm() {
     formData.append('hopso', hopsoSelect);
     formData.append('dongco', dongcoSelect);
     formData.append('mauxe', mausacSelect);
-    formData.append('diachi', diachiInput);
+    formData.append('diachi', `${district + "--" + province}`);
     formData.append('description', descriptionInput);
     selectedImages.forEach(file => {
         formData.append('images', file);

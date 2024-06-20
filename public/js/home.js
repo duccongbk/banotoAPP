@@ -10,28 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     let cars = []; // Mảng chứa thông tin của các xe
     let carShortBy = [];
-    // <img src="${car.image2}" alt="${car.carname}">
-    // <h1>${car.id_car}</h1>
-    // <img src="${car.image1}" alt="${car.carname}" class="image-size"></img>
-    // 
-    // const jwtCookie = getCookie('jwt');
-    // if (jwtCookie) {
-    //     alert('Value of "jwt" cookie: ' + jwtCookie);
-    // } else {
-    //     alert('Cookie "jwt" not found');
-    // }
     getCars();
-    // function getCookie(cookieName) {
-    //     const cookieString = document.cookie;
-    //     const cookies = cookieString.split(';').map(cookie => cookie.trim().split('='));
-    //     for (const [name, value] of cookies) {
-    //         if (name === cookieName) {
-    //             return value;
-    //         }
-    //     }
-    //     return null; // Trả về null nếu không tìm thấy cookie
-    // }
     selectLoc();
+    loadAddressData();
     Select.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select.value;
@@ -195,14 +176,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function để thêm sản phẩm vào giỏ hàng
-    function addToCart(productName) {
-        alert(`Đã thêm ${productName} vào giỏ hàng!`);
-        // Thêm các xử lý khác tại đây (ví dụ: cập nhật giỏ hàng, lưu vào cơ sở dữ liệu, v.v.)
-    }
-    function viewCar(productName) {
-        alert(`Đã xem ${productName} `);
-        // Thêm các xử lý khác tại đây (ví dụ: cập nhật giỏ hàng, lưu vào cơ sở dữ liệu, v.v.)
-    }
     // Sự kiện cho nút "Previous"
     prevButton.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -256,6 +229,65 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);
             });
+    }
+
+    function populateProvinceOptions(data) {
+        // var province_id = null;
+        var provinceSelect = document.getElementById('select-diachi');
+        provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+        const provincesMap = {};
+
+        data.forEach(items => {
+            provinceSelect.innerHTML += `<option value="${items.province.id}">${items.province.name}</option>`;
+            provincesMap[items.province.id] = items.province.name;
+        });
+        provinceSelect.addEventListener('change', function () {
+            var province_id = provinceSelect.value;
+            if (provincesMap[province_id]) {
+                const targetProvince = provincesMap[province_id].trim();
+                // carShortBy = cars.filter(car => car.diachi === provincesMap[province_id]);
+                const regex = new RegExp(`\\b${targetProvince}\\b`, 'i');
+                const filteredCars = cars.filter(car => regex.test(car.diachi));
+                displayCars(1, filteredCars); // Hiển thị các xe trên trang
+                createPaginationButtons(filteredCars); // Tạo nút phân trang
+            } else {
+                clearDistrictOptions();
+            }
+        });
+    }
+    function clearDistrictOptions() {
+        var districtSelect = document.getElementById('select-diachi');
+        districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+    }
+    function loadAddressData() {
+        fetch('/address', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // addressData = data; // Lưu dữ liệu vào biến toàn cục addressData
+                populateProvinceOptions(data); // Sau khi nhận dữ liệu, điền vào dropdown
+            })
+            .catch(error => {
+                console.error('Error loading address data:', error);
+            });
+    }
+    function filterCarsByProvince(province_id) {
+        const targetProvince = provincesMap[province_id].trim(); // Loại bỏ khoảng trắng không cần thiết
+
+        // Sử dụng biểu thức chính quy để tìm kiếm sự khớp chính xác
+        const regex = new RegExp(`\\b${targetProvince}\\b`, 'i'); // '\\b' đảm bảo sự phù hợp chính xác từng từ
+
+        const filteredCars = cars.filter(car => regex.test(car.diachi));
+        return filteredCars;
     }
 });
 function formatCurrency(amount) {

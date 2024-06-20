@@ -766,7 +766,7 @@ app.post('/addCars', authenticateToken, upload.array('images', 7), (req, res) =>
              VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 
-    const values = [userId, carname, automaker, price, sxyear, sokm, hopso, dongco, mauxe, diachi, description, null, currentTimeVietnam];
+    const values = [userId, carname, automaker, price, sxyear, sokm, hopso, dongco, mauxe, diachi, description, "null", currentTimeVietnam];
 
     // Thêm các tệp đã tải lên vào câu lệnh SQL
     for (let i = 0; i < 7; i++) {
