@@ -5,141 +5,233 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.getElementById('nextButton');
     const Select = document.getElementById('select');
     const Select_hangxe = document.getElementById('select-hangxe');
+    const filterDiv = document.getElementById('filter');
+    const btnSearch = document.getElementById('btnSearch');
+    const inputtext = document.getElementById('inputtext');
+    const scrollingText = document.getElementById('scrollingText');
+    const thongbao = document.getElementById('thongbao');
+    let isScrolling = true;
     const carsPerPage = 6 * 8; // 10 xe hàng ngang * 20 xe hàng dọc
     let totalCars = 0; // Tổng số lượng xe
     let currentPage = 1;
     let cars = []; // Mảng chứa thông tin của các xe
     let carShortBy = [];
+    let filter = {
+        price: null,
+        hang: null,
+        city: null,
+        search: null
+    };
     getCars();
     selectLoc();
     loadAddressData();
+    // setInterval(() => {
+    //     scrollingText.style.visibility = (scrollingText.style.visibility === 'hidden' ? '' : 'hidden');
+    // }, 500);
+
+    // Scrolling effect
+    let startPosition = thongbao.offsetWidth;
+    function scrollText(text) {
+        if (isScrolling) {
+            startPosition--;
+            if (startPosition < -scrollingText.offsetWidth) {
+                startPosition = thongbao.offsetWidth; // Dừng cuộn khi văn bản đã chạy hết qua bên trái
+            }
+            scrollingText.textContent = text;
+            scrollingText.style.transform = `translateX(${startPosition}px)`;
+            requestAnimationFrame(() => scrollText(text));
+        } else {
+            scrollingText.style.visibility = 'hidden'; // Ẩn văn bản khi dừng cuộn
+        }
+    }
+    scrollText("xin chao ``````````````````");
     Select.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select.value;
         switch (selectedValue) {
             case 'Giá từ thấp đến cao ':
-                carShortBy = [...cars];
-                carShortBy.sort((car1, car2) => car1.price - car2.price);
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
+                filterByPrice("Giá từ thấp đến cao");
+                appendLabel("Giá từ thấp đến cao");
                 break;
             case 'Giá từ cao đến thấp ':
-                carShortBy = [...cars];
-                carShortBy.sort((car1, car2) => car2.price - car1.price);
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
+                filterByPrice("Giá từ cao đến thấp");
+                appendLabel("Giá từ cao đến thấp");
                 break;
             default:
                 console.log('Giá trị không hợp lệ');
         }
-
-        // In ra giá trị đã chọn
-
     });
     SelectHangxe();
     Select_hangxe.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select_hangxe.value;
-        switch (selectedValue) {
-            case 'Toyota':
-                carShortBy = cars.filter(car => car.automaker === 'Toyota');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Honda':
-                carShortBy = cars.filter(car => car.automaker === 'Honda');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Ford':
-                carShortBy = cars.filter(car => car.automaker === 'Ford');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Chevrolet':
-                carShortBy = cars.filter(car => car.automaker === 'Chevrolet');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Volkswagen':
-                carShortBy = cars.filter(car => car.automaker === 'Volkswagen');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'BMW':
-                carShortBy = cars.filter(car => car.automaker === 'BMW');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Mercedes-Benz':
-                carShortBy = cars.filter(car => car.automaker === 'Mercedes-Benz');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Audi':
-                carShortBy = cars.filter(car => car.automaker === 'Audi');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Nissan':
-                carShortBy = cars.filter(car => car.automaker === 'Nissan');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            case 'Hyundai':
-                carShortBy = cars.filter(car => car.automaker === 'Hyundai');
-                displayCars(1, carShortBy); // Hiển thị các xe trên trang
-                createPaginationButtons(carShortBy); // Tạo nút phân trang
-                break;
-            default:
-                console.log('Giá trị không hợp lệ');
-                break;
+        filterByHang(selectedValue);
+        appendLabel(selectedValue);
+    });
+    document.getElementById('inputtext').addEventListener('keypress', async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter
+            if (inputtext.value.trim()) {
+                filterSearch(inputtext.value.trim());
+            } else {
+                alert("Khong duoc de trong");
+            }
         }
     });
+    btnSearch.addEventListener('click', function () {
+        // Lấy giá trị của option đã chọn
+        // const selectedValue = Select_hangxe.value;
+        if (inputtext.value.trim()) {
+            filterSearch(inputtext.value.trim());
+        } else {
+            alert("Khong duoc de trong");
+        }
+    });
+
+    document.getElementById('select-diachi').addEventListener('change', function () {
+        const selectedValue = this.options[this.selectedIndex].text;
+        filterByCity(selectedValue);
+        appendLabel(selectedValue);
+    });
+
+    function filterByPrice(param) {
+        filter['price'] = param;
+        updateFilter();
+    }
+
+    function filterByHang(param) {
+        filter['hang'] = param;
+        updateFilter();
+    }
+
+    function filterByCity(param) {
+        filter['city'] = param;
+        updateFilter();
+    }
+    function filterSearch(param) {
+        filter['search'] = param;
+        updateFilter();
+    }
+    function updateFilter() {
+        carShortBy = [...cars];
+
+        // Lọc theo giá
+        if (filter.price) {
+            if (filter.price === "Giá từ thấp đến cao") {
+                carShortBy.sort((car1, car2) => car1.price - car2.price);
+            } else if (filter.price === "Giá từ cao đến thấp") {
+                carShortBy.sort((car1, car2) => car2.price - car1.price);
+            }
+        }
+
+        // Lọc theo hãng
+        if (filter.hang) {
+            carShortBy = carShortBy.filter(car => car.automaker === filter.hang);
+        }
+        // Lọc theo thành phố
+        if (filter.city) {
+            const targetProvince = filter.city.trim();
+            const regex = new RegExp(`\\b${targetProvince}\\b`, 'i');
+            carShortBy = carShortBy.filter(car => regex.test(car.diachi));
+        }
+        if (filter.search) {
+            carShortBy = carShortBy.filter(item => {
+                // Duyệt qua tất cả các trường của đối tượng arrCars
+                for (const key in item) {
+                    // Kiểm tra nếu giá trị của trường là một chuỗi và chứa từ khóa tìm kiếm
+                    if (typeof item[key] === 'string' && item[key].toLowerCase().includes(filter.search.toLowerCase())) {
+                        return true; // Trả về true nếu có bất kỳ trường nào thỏa mãn điều kiện
+                    }
+                }
+                return false; // Trả về false nếu không có trường nào thỏa mãn điều kiện
+            });
+        }
+
+        // Sau khi áp dụng bộ lọc, trả về mảng carShortBy mới              
+        // console.log(carShortBy);
+        displayCars(1, carShortBy); // Hiển thị các xe trên trang
+        createPaginationButtons(carShortBy); // Tạo nút phân trang
+    }
+
+    function createLabel(text) {
+        const labelContainer = document.createElement('div');
+        labelContainer.classList.add('label-container');
+
+        const label = document.createElement('label');
+        label.textContent = text;
+
+        const closeButton = document.createElement('span');
+        closeButton.textContent = 'x';
+        closeButton.classList.add('close-btn');
+        closeButton.onclick = () => {
+            // Xóa tiêu chí khỏi filter
+            if (text.includes('Giá từ')) {
+                filter.price = null;
+                filter.search = null
+            } else if (filter.hang === text) {
+                filter.search = null
+                filter.hang = null;
+            } else if (filter.city === text) {
+                filter.search = null
+                filter.city = null;
+            }
+            labelContainer.remove();
+            updateFilter();
+        };
+
+        labelContainer.appendChild(label);
+        labelContainer.appendChild(closeButton);
+
+        return labelContainer;
+    }
+
+    function appendLabel(text) {
+        const existingLabels = Array.from(document.querySelectorAll('.label-container label'));
+        const isExisting = existingLabels.some(label => label.textContent === text);
+        if (!isExisting) {
+            filterDiv.appendChild(createLabel(text));
+        }
+    }
     function getRandomNumber() {
         // Sinh số ngẫu nhiên từ 1 đến 7
         return Math.floor(Math.random() * 7) + 1;
     }
-    // Function để hiển thị các xe trên trang
     function displayCars(page, data) {
         carCollection.innerHTML = '';
+        inputtext.value = '';
         const startIndex = (page - 1) * carsPerPage;
         const endIndex = Math.min(startIndex + carsPerPage, totalCars);
+        // console.log("Data received:", data); // Debug: Kiểm tra dữ liệu truyền vào hàm
         for (let i = startIndex; i < endIndex; i++) {
             a = getRandomNumber();
             const car = data[i];
-            const carElement = document.createElement('div');
-            carElement.classList.add('car');
-            carElement.innerHTML = `
-                
-                <h3>${car.carname}</h3>
-                <p class = "p-price">Giá: ${formatCurrencyToString(car.price) + " VNĐ"}</p>
-                <p class = "p-year">Năm: ${car.sxyear}</p>
-                <p class = "p-time">Thời gian: ${getTimeDifference(car.created_at)}</p>
-                <img src="${car['image' + a]}" alt="${car.carname}" class="image-size"></img>
-                <!-- Thêm các hình ảnh khác tại đây -->
-                 <p class = "p-diachi">  ${car.diachi}</p>
-                <p class = "p-hang">Hãng: ${car.automaker}</p>
-                
-            `;
-            carElement.addEventListener('click', (event) => {
-                // Xử lý khi carElement được click
-                // event.preventDefault();
-                // alert(`${car.id_car}`);
-                window.open(`/showCarInfo?id_car=${car.id_car}`, '_blank');
-                // Thêm code xử lý khác nếu cần
-            });
-            carCollection.appendChild(carElement);
+            // console.log("Current car:", car); // Debug: Kiểm tra dữ liệu của từng xe
+            if (car) {
+                const carElement = document.createElement('div');
+                carElement.classList.add('car');
+                carElement.innerHTML = `
+                    <h3>${car.carname}</h3>
+                    <p class="p-price">Giá: ${formatCurrencyToString(car.price) + " VNĐ"}</p>
+                    <p class="p-year">Năm: ${car.sxyear}</p>
+                    <p class="p-time">Thời gian: ${getTimeDifference(car.created_at)}</p>
+                    <img src="${car['image' + a]}" alt="${car.carname}" class="image-size"></img>
+                    <p class="p-diachi">${car.diachi}</p>
+                    <p class="p-hang">Hãng: ${car.automaker}</p>
+                `;
+                carElement.addEventListener('click', (event) => {
+                    window.open(`/showCarInfo?id_car=${car.id_car}`, '_blank');
+                });
+                carCollection.appendChild(carElement);
+            } else {
+                // console.warn("Undefined car data at index", i); // Debug: Thông báo nếu xe không tồn tại
+            }
         }
     }
 
     function formatCurrencyToString(amount) {
-        // Chia cho 1 tỷ để lấy phần tỷ
         const billion = Math.floor(amount / 1000000000);
-        // Chia cho 1 triệu để lấy phần triệu
         const million = Math.floor((amount % 1000000000) / 1000000);
 
-        // Xây dựng chuỗi kết quả
         let result = "";
         if (billion > 0) {
             result += billion + " tỷ ";
@@ -147,15 +239,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (million > 0) {
             result += million + " triệu ";
         }
-        return result.trim(); // Loại bỏ khoảng trắng ở đầu và cuối chuỗi
+        return result.trim();
     }
 
-    // Sử dụng hàm formatCurrency với số tiền 2,222,222,222
-
-
-    // Function để tạo nút phân trang
     function createPaginationButtons(data) {
-        pagination.innerHTML = ''; // Xóa nút phân trang cũ trước khi tạo mới
+        pagination.innerHTML = '';
         const totalPages = Math.ceil(totalCars / carsPerPage);
         for (let i = 1; i <= totalPages; i++) {
             const button = document.createElement('button');
@@ -164,19 +252,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentPage = i;
                 displayCars(currentPage, data);
 
-                // Xóa lớp active-page khỏi tất cả các nút
                 const allButtons = document.querySelectorAll('.pagination button');
                 allButtons.forEach(btn => btn.classList.remove('active-page'));
 
-                // Thêm lớp active-page vào nút trang hiện tại
                 button.classList.add('active-page');
             });
             pagination.appendChild(button);
         }
     }
 
-    // Function để thêm sản phẩm vào giỏ hàng
-    // Sự kiện cho nút "Previous"
     prevButton.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -184,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Sự kiện cho nút "Next"
     nextButton.addEventListener('click', () => {
         const totalPages = Math.ceil(totalCars / carsPerPage);
         if (currentPage < totalPages) {
@@ -192,18 +275,6 @@ document.addEventListener("DOMContentLoaded", function () {
             displayCars(currentPage);
         }
     });
-
-    // Sự kiện cho container chứa tất cả các sản phẩm
-    // carCollection.addEventListener('click', function (event) {
-    //     if (event.target.classList.contains('add-to-cart-btn')) {
-    //         const productName = event.target.parentNode.querySelector('h3').textContent;
-    //         addToCart(productName);
-    //     } else {
-    //         const productName = event.target.parentNode.querySelector('h3').textContent;
-    //         viewCar(productName);
-
-    //     }
-    // });
 
     function getCars() {
         fetch('/getCars', {
@@ -221,9 +292,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 if (data.length > 0) {
                     totalCars = data.length;
-                    cars = data.map(item => item.arrCars); // Lấy thông tin của các xe từ dữ liệu trả về
-                    displayCars(currentPage, cars); // Hiển thị các xe trên trang
-                    createPaginationButtons(cars); // Tạo nút phân trang
+                    cars = data.map(item => item.arrCars);
+                    displayCars(currentPage, cars);
+                    createPaginationButtons(cars);
                 }
             })
             .catch(error => {
@@ -232,7 +303,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function populateProvinceOptions(data) {
-        // var province_id = null;
         var provinceSelect = document.getElementById('select-diachi');
         provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
         const provincesMap = {};
@@ -244,21 +314,23 @@ document.addEventListener("DOMContentLoaded", function () {
         provinceSelect.addEventListener('change', function () {
             var province_id = provinceSelect.value;
             if (provincesMap[province_id]) {
+                appendLabel(provincesMap[province_id].trim());
                 const targetProvince = provincesMap[province_id].trim();
-                // carShortBy = cars.filter(car => car.diachi === provincesMap[province_id]);
                 const regex = new RegExp(`\\b${targetProvince}\\b`, 'i');
                 const filteredCars = cars.filter(car => regex.test(car.diachi));
-                displayCars(1, filteredCars); // Hiển thị các xe trên trang
-                createPaginationButtons(filteredCars); // Tạo nút phân trang
+                displayCars(1, filteredCars);
+                createPaginationButtons(filteredCars);
             } else {
                 clearDistrictOptions();
             }
         });
     }
+
     function clearDistrictOptions() {
         var districtSelect = document.getElementById('select-diachi');
         districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
     }
+
     function loadAddressData() {
         fetch('/address', {
             method: 'GET',
@@ -273,48 +345,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
-                // addressData = data; // Lưu dữ liệu vào biến toàn cục addressData
-                populateProvinceOptions(data); // Sau khi nhận dữ liệu, điền vào dropdown
+                populateProvinceOptions(data);
             })
             .catch(error => {
                 console.error('Error loading address data:', error);
             });
     }
+
     function filterCarsByProvince(province_id) {
-        const targetProvince = provincesMap[province_id].trim(); // Loại bỏ khoảng trắng không cần thiết
-
-        // Sử dụng biểu thức chính quy để tìm kiếm sự khớp chính xác
-        const regex = new RegExp(`\\b${targetProvince}\\b`, 'i'); // '\\b' đảm bảo sự phù hợp chính xác từng từ
-
+        const targetProvince = provincesMap[province_id].trim();
+        const regex = new RegExp(`\\b${targetProvince}\\b`, 'i');
         const filteredCars = cars.filter(car => regex.test(car.diachi));
         return filteredCars;
     }
 });
-function formatCurrency(amount) {
-    // Chuyển đổi số thành chuỗi với hai chữ số thập phân
-    let parts = parseFloat(amount).toFixed(2).toString().split('.');
 
-    // Định dạng phần nguyên với dấu chấm phân cách ngàn
+function formatCurrency(amount) {
+    let parts = parseFloat(amount).toFixed(2).toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-    // Kiểm tra nếu phần thập phân là "00" thì loại bỏ
     if (parts[1] === "00") {
         return parts[0];
     }
 
-    // Nếu không phải "00" thì ghép lại phần nguyên và phần thập phân
     return parts.join('.');
 }
 
 function selectLoc() {
     const Select = document.getElementById('select');
-
-
     const selectOptions = [
         'Giá từ thấp đến cao ',
         'Giá từ cao đến thấp ',
     ];
-
 
     selectOptions.forEach(option => {
         const newOption = document.createElement('option');
@@ -323,10 +385,10 @@ function selectLoc() {
         Select.appendChild(newOption);
     });
 }
+
 function SelectHangxe() {
     const SelectHangxe = document.getElementById('select-hangxe');
     var selectHangXeOptions = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Volkswagen', 'BMW', 'Mercedes-Benz', 'Audi', 'Nissan', 'Hyundai'];
-
 
     selectHangXeOptions.forEach(option => {
         const newOption = document.createElement('option');
@@ -335,6 +397,7 @@ function SelectHangxe() {
         SelectHangxe.appendChild(newOption);
     });
 }
+
 function getTimeDifference(timestamp) {
     const commentTime = new Date(timestamp);
     const currentTime = new Date();
