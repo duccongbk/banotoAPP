@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 24, 2024 at 04:54 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th6 24, 2024 lúc 02:03 PM
+-- Phiên bản máy phục vụ: 10.4.27-MariaDB
+-- Phiên bản PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mycar`
+-- Cơ sở dữ liệu: `mycar`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_roles`
+-- Cấu trúc bảng cho bảng `admin_roles`
 --
 
 CREATE TABLE `admin_roles` (
@@ -33,7 +33,7 @@ CREATE TABLE `admin_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin_roles`
+-- Đang đổ dữ liệu cho bảng `admin_roles`
 --
 
 INSERT INTO `admin_roles` (`id_admin`, `id_role`) VALUES
@@ -43,7 +43,7 @@ INSERT INTO `admin_roles` (`id_admin`, `id_role`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `car`
+-- Cấu trúc bảng cho bảng `car`
 --
 
 CREATE TABLE `car` (
@@ -71,7 +71,7 @@ CREATE TABLE `car` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `car`
+-- Đang đổ dữ liệu cho bảng `car`
 --
 
 INSERT INTO `car` (`id_car`, `id_user`, `carname`, `automaker`, `price`, `sxyear`, `sokm`, `hopso`, `dongco`, `mauxe`, `diachi`, `description`, `active`, `created_at`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`) VALUES
@@ -127,7 +127,7 @@ INSERT INTO `car` (`id_car`, `id_user`, `carname`, `automaker`, `price`, `sxyear
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comment`
+-- Cấu trúc bảng cho bảng `comment`
 --
 
 CREATE TABLE `comment` (
@@ -135,45 +135,45 @@ CREATE TABLE `comment` (
   `id_car` char(36) DEFAULT NULL,
   `id_user` char(36) DEFAULT NULL,
   `noidung` text DEFAULT NULL,
-  `like_status` int(11) DEFAULT NULL,
+  `like_status` varchar(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `images` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `comment`
+-- Đang đổ dữ liệu cho bảng `comment`
 --
 
 INSERT INTO `comment` (`id_comment`, `id_car`, `id_user`, `noidung`, `like_status`, `created_at`, `images`) VALUES
-('0fe8dd92-2eb8-11ef-bfe8-b42e997fc79f', '2d288d34-2dff-11ef-a0ea-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', 'XXXXXXXX', 0, '2024-06-20 10:49:14', '[{\"filename\":\"edb8d8a9-5612-4921-bb97-a464d41a2dc6-pexels-photo-691595.webp\",\"path\":\"public\\\\images\\\\imagesComments\\\\edb8d8a9-5612-4921-bb97-a464d41a2dc6-pexels-photo-691595.webp\"},{\"filename\":\"e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg\"},{\"filename\":\"ef01897f-a48e-4386-91d5-ae37c56e344e-pexels-photo-1841120.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\ef01897f-a48e-4386-91d5-ae37c56e344e-pexels-photo-1841120.jpg\"},{\"filename\":\"cdaecbb3-5b42-43ac-890a-93503e482c4e-pexels-photo-2739286.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\cdaecbb3-5b42-43ac-890a-93503e482c4e-pexels-photo-2739286.jpg\"}]'),
-('6b59e284-2eb8-11ef-bfe8-b42e997fc79f', '2d288d34-2dff-11ef-a0ea-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', 'http://localhost:3000/public/images/imagesComments/e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg', 0, '2024-06-20 10:51:48', '[]');
+('0fe8dd92-2eb8-11ef-bfe8-b42e997fc79f', '2d288d34-2dff-11ef-a0ea-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', 'XXXXXXXX', '0', '2024-06-20 10:49:14', '[{\"filename\":\"edb8d8a9-5612-4921-bb97-a464d41a2dc6-pexels-photo-691595.webp\",\"path\":\"public\\\\images\\\\imagesComments\\\\edb8d8a9-5612-4921-bb97-a464d41a2dc6-pexels-photo-691595.webp\"},{\"filename\":\"e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg\"},{\"filename\":\"ef01897f-a48e-4386-91d5-ae37c56e344e-pexels-photo-1841120.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\ef01897f-a48e-4386-91d5-ae37c56e344e-pexels-photo-1841120.jpg\"},{\"filename\":\"cdaecbb3-5b42-43ac-890a-93503e482c4e-pexels-photo-2739286.jpg\",\"path\":\"public\\\\images\\\\imagesComments\\\\cdaecbb3-5b42-43ac-890a-93503e482c4e-pexels-photo-2739286.jpg\"}]'),
+('6b59e284-2eb8-11ef-bfe8-b42e997fc79f', '2d288d34-2dff-11ef-a0ea-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', 'http://localhost:3000/public/images/imagesComments/e44cdfb9-3f92-4dc0-b09a-9ff9b906cd2c-pexels-photo-1768826.jpg', '0', '2024-06-20 10:51:48', '[]');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `replycomment`
+-- Cấu trúc bảng cho bảng `replycomment`
 --
 
 CREATE TABLE `replycomment` (
   `id_reply` char(36) NOT NULL,
   `id_comment` char(36) DEFAULT NULL,
   `id_user` char(36) DEFAULT NULL,
-  `likecomment` int(11) DEFAULT NULL,
+  `likecomment` varchar(11) DEFAULT NULL,
   `noidung` text DEFAULT NULL,
   `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `replycomment`
+-- Đang đổ dữ liệu cho bảng `replycomment`
 --
 
 INSERT INTO `replycomment` (`id_reply`, `id_comment`, `id_user`, `likecomment`, `noidung`, `created_at`) VALUES
-('1e2668cf-2eb8-11ef-bfe8-b42e997fc79f', '0fe8dd92-2eb8-11ef-bfe8-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', 0, 'TOI CHIU THOI', '2024-06-20 10:49:38');
+('1e2668cf-2eb8-11ef-bfe8-b42e997fc79f', '0fe8dd92-2eb8-11ef-bfe8-b42e997fc79f', '171ea9da-2dfd-11ef-a0ea-b42e997fc79f', '0', 'TOI CHIU THOI', '2024-06-20 10:49:38');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `roles`
+-- Cấu trúc bảng cho bảng `roles`
 --
 
 CREATE TABLE `roles` (
@@ -182,7 +182,7 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `roles`
+-- Đang đổ dữ liệu cho bảng `roles`
 --
 
 INSERT INTO `roles` (`id_role`, `role_name`) VALUES
@@ -192,7 +192,7 @@ INSERT INTO `roles` (`id_role`, `role_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -206,7 +206,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`id_user`, `ten`, `sdt`, `pass`, `diachi`, `created_at`, `active`) VALUES
@@ -214,73 +214,73 @@ INSERT INTO `users` (`id_user`, `ten`, `sdt`, `pass`, `diachi`, `created_at`, `a
 ('f26667f8-2df7-11ef-a0ea-b42e997fc79f', 'Duc Cong Nguyen', '0347425168', '123', '50 phan van khoe phuong 2 quan 6', '2024-06-19 04:54:01', NULL);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `admin_roles`
+-- Chỉ mục cho bảng `admin_roles`
 --
 ALTER TABLE `admin_roles`
   ADD PRIMARY KEY (`id_admin`,`id_role`),
   ADD KEY `id_role` (`id_role`);
 
 --
--- Indexes for table `car`
+-- Chỉ mục cho bảng `car`
 --
 ALTER TABLE `car`
   ADD PRIMARY KEY (`id_car`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indexes for table `comment`
+-- Chỉ mục cho bảng `comment`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id_comment`),
   ADD KEY `fk_comment_car` (`id_car`);
 
 --
--- Indexes for table `replycomment`
+-- Chỉ mục cho bảng `replycomment`
 --
 ALTER TABLE `replycomment`
   ADD PRIMARY KEY (`id_reply`),
   ADD KEY `fk_replycomment_comment` (`id_comment`);
 
 --
--- Indexes for table `roles`
+-- Chỉ mục cho bảng `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id_role`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `admin_roles`
+-- Các ràng buộc cho bảng `admin_roles`
 --
 ALTER TABLE `admin_roles`
   ADD CONSTRAINT `admin_roles_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`);
 
 --
--- Constraints for table `car`
+-- Các ràng buộc cho bảng `car`
 --
 ALTER TABLE `car`
   ADD CONSTRAINT `car_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
 
 --
--- Constraints for table `comment`
+-- Các ràng buộc cho bảng `comment`
 --
 ALTER TABLE `comment`
   ADD CONSTRAINT `fk_comment_car` FOREIGN KEY (`id_car`) REFERENCES `car` (`id_car`) ON DELETE CASCADE;
 
 --
--- Constraints for table `replycomment`
+-- Các ràng buộc cho bảng `replycomment`
 --
 ALTER TABLE `replycomment`
   ADD CONSTRAINT `fk_replycomment_comment` FOREIGN KEY (`id_comment`) REFERENCES `comment` (`id_comment`) ON DELETE CASCADE,

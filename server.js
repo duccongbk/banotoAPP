@@ -20,7 +20,6 @@ require('dotenv').config();
 const createdAt = new Date(); // Giả sử bạn có giá trị createdAt từ cơ sở dữ liệu
 app.use(cookieParser());
 const diachiPath = path.join(__dirname, 'diachi.json');
-
 const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 const currentTimeVietnam = momentZone().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss');
 const secretKey = process.env.secretKey;
@@ -54,7 +53,7 @@ app.use(function (req, res, next) {
 });
 
 app.use((req, res, next) => {
-    if (req.hostname === 'admin.localhost') {
+    if (req.hostname === process.env.ADMIN_HOST) {
         adminRouter(req, res, next);
     } else {
         next();
@@ -63,18 +62,19 @@ app.use((req, res, next) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/images/'); // Thư mục lưu trữ ảnh
+        cb(null, path.join('public', 'images'));
     },
     filename: function (req, file, cb) {
-        cb(null, uuid.v4() + '-' + file.originalname); // Tên file duy nhất
+        cb(null, uuid.v4() + '-' + file.originalname);
     }
 });
+
 const storageImageComment = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/images/imagesComments/'); // Thư mục lưu trữ ảnh
+        cb(null, path.join('public', 'images', 'imagesComments'));
     },
     filename: function (req, file, cb) {
-        cb(null, uuid.v4() + '-' + file.originalname); // Tên file duy nhất
+        cb(null, uuid.v4() + '-' + file.originalname);
     }
 });
 
@@ -304,7 +304,7 @@ app.post('/login', (req, res, next) => {
                         }
                         if (result.length > 0) {
                             // Nếu người dùng có vai trò là admin, chuyển hướng đến trang admin
-                            res.status(200).json({ token: token, redirectUrl: 'http://admin.localhost:3000/v1' });
+                            res.status(200).json({ token: token, redirectUrl: `http://${process.env.ADMIN_HOST}:3000/v1` });
                         } else {
                             // Nếu không phải là admin, chuyển hướng đến trang home
                             res.status(200).json({ token: token, redirectUrl: '/home' });
