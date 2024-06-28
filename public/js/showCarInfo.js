@@ -192,7 +192,7 @@ function displayCars(carData) {
     const carImagesContainer = document.createElement('div');
     carImagesContainer.classList.add('car-images');
     for (let i = 1; i <= 7; i++) {
-        const imageSrc = carInfo[`image${i}`];
+        const imageSrc = convertpath(carInfo[`image${i}`]);
         imagesarr.push(imageSrc);
         if (imageSrc) {
             const imageElement = document.createElement('img');
@@ -210,6 +210,10 @@ function displayCars(carData) {
     carElement.appendChild(carImagesContainer);
 
     carListContainer.appendChild(carElement);
+}
+function convertpath(filePath) {
+    let convertedPath = filePath.replace(/\//g, '\\');
+    return convertedPath
 }
 async function insertReplycomment(id_comment, likecomment, noidung) {
     try {

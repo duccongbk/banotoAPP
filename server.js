@@ -80,6 +80,9 @@ const storageImageComment = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const uploadImagesComment = multer({ storage: storageImageComment });
+app.get('/', (req, res, next) => {
+    res.sendFile(path.join(__dirname, './public/html/home.html'))
+})
 app.get('/home', (req, res, next) => {
     res.sendFile(path.join(__dirname, './public/html/home.html'))
 })

@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scrollingText.style.visibility = 'hidden'; // Ẩn văn bản khi dừng cuộn
         }
     }
-    scrollText("xin chao ``````````````````");
+    scrollText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     Select.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select.value;
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="p-price">Giá: ${formatCurrencyToString(car.price) + " VNĐ"}</p>
                     <p class="p-year">Năm: ${car.sxyear}</p>
                     <p class="p-time">Thời gian: ${getTimeDifference(car.created_at)}</p>
-                    <img src="${car['image' + a]}" alt="${car.carname}" class="image-size"></img>
+                    <img src="${convertPath(car['image' + a])}" alt="${car.carname}" class="image-size"></img>
                     <p class="p-diachi">${car.diachi}</p>
                     <p class="p-hang">Hãng: ${car.automaker}</p>
                 `;
@@ -227,7 +227,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-
+    function convertPath(filePath) {
+        return filePath.replace(/\\/g, '/');
+    }
+    
     function formatCurrencyToString(amount) {
         const billion = Math.floor(amount / 1000000000);
         const million = Math.floor((amount % 1000000000) / 1000000);
@@ -284,13 +287,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
-    
+
             if (!response.ok) {
                 throw new Error('Phản hồi mạng không ổn: ' + response.statusText);
             }
-    
+
             const data = await response.json();
-    
+
             if (Array.isArray(data) && data.length > 0) {
                 totalCars = data.length;
                 cars = data.map(item => item.arrCars);
@@ -303,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('Có vấn đề với thao tác fetch của bạn:', error);
         }
     }
-    
+
     function populateProvinceOptions(data) {
         var provinceSelect = document.getElementById('select-diachi');
         provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
