@@ -340,37 +340,45 @@ function handleReplySubmit(commentId) {
 }
 
 function getTimeDifference(timestamp) {
-    const commentTime = new Date(timestamp);
-    const currentTime = new Date();
-    const timeDiff = currentTime - commentTime;
+    const commentTimeUTC = moment.utc(timestamp);
+    const commentTimeVietnam = commentTimeUTC.utcOffset(7 * 60); // GMT+7
 
-    const minutes = Math.floor(timeDiff / 1000 / 60);
+    const currentTime = moment();
+    const currentTimeVietnam = currentTime.utcOffset(7 * 60); // GMT+7
+
+    const timeDiffSeconds = currentTimeVietnam.diff(commentTimeVietnam, 'seconds');
+
+    const minutes = Math.floor(timeDiffSeconds / 60);
+    if (minutes < 0) {
+        return `New *`;
+    }
     if (minutes < 60) {
-        return `${minutes} minutes ago`;
+        return `${minutes} phút trước`;
     }
 
     const hours = Math.floor(minutes / 60);
     if (hours < 24) {
-        return `${hours} hours ago`;
+        return `${hours} giờ trước`;
     }
 
     const days = Math.floor(hours / 24);
     if (days < 7) {
-        return `${days} days ago`;
+        return `${days} ngày trước`;
     }
 
     const weeks = Math.floor(days / 7);
     if (weeks < 4) {
-        return `${weeks} weeks ago`;
+        return `${weeks} tuần trước`;
     }
 
     const months = Math.floor(days / 30);
     if (months < 12) {
-        return `${months} months ago`;
+        return `${months} tháng trước`;
     }
 
     const years = Math.floor(months / 12);
-    return `${years} years ago`;
+    return `${years} năm trước`;
+
 }
 
 function enlargeImage(imageSrc, images, currentIndex) {

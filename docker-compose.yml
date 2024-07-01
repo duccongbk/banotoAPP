@@ -20,10 +20,10 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     environment:
-      PMA_HOST: ${DB_HOST}
+      PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "8080:80"
+      - "8889:80"
     env_file:
       - .env
 
@@ -31,7 +31,7 @@ services:
     build: .
     container_name: banoto
     environment:
-      DB_HOST: ${DB_HOST}
+      DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
@@ -41,5 +41,18 @@ services:
       - db
     env_file:
       - .env
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "8888:8888"  # Thêm cổng 8888 để Nginx lắng nghe
+    depends_on:
+      - banoto
+      - phpmyadmin
+
 volumes:
   db_data:

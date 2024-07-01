@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scrollingText.style.visibility = 'hidden'; // Ẩn văn bản khi dừng cuộn
         }
     }
-    scrollText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    scrollText("321xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123");
     Select.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select.value;
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="p-price">Giá: ${formatCurrencyToString(car.price) + " VNĐ"}</p>
                     <p class="p-year">Năm: ${car.sxyear}</p>
                     <p class="p-time">Thời gian: ${getTimeDifference(car.created_at)}</p>
-                    <img src="${convertPath(car['image' + a])}" alt="${car.carname}" class="image-size"></img>
+                    <img src="${car['image' + a]}" alt="${car.carname}" class="image-size"></img>
                     <p class="p-diachi">${car.diachi}</p>
                     <p class="p-hang">Hãng: ${car.automaker}</p>
                 `;
@@ -227,10 +227,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-    function convertPath(filePath) {
-        return filePath.replace(/\\/g, '/');
+
+    function convertPathFormat(path) {
+        // Replace forward slashes (/) with backslashes (\)
+        return path.replace(/\//g, '\\');
     }
-    
+
     function formatCurrencyToString(amount) {
         const billion = Math.floor(amount / 1000000000);
         const million = Math.floor((amount % 1000000000) / 1000000);
@@ -404,11 +406,18 @@ function SelectHangxe() {
 }
 
 function getTimeDifference(timestamp) {
-    const commentTime = new Date(timestamp);
-    const currentTime = new Date();
-    const timeDiff = currentTime - commentTime;
+    const commentTimeUTC = moment.utc(timestamp);
+    const commentTimeVietnam = commentTimeUTC.utcOffset(7 * 60); // GMT+7
 
-    const minutes = Math.floor(timeDiff / 1000 / 60);
+    const currentTime = moment();
+    const currentTimeVietnam = currentTime.utcOffset(7 * 60); // GMT+7
+
+    const timeDiffSeconds = currentTimeVietnam.diff(commentTimeVietnam, 'seconds');
+
+    const minutes = Math.floor(timeDiffSeconds / 60);
+    if (minutes < 0) {
+        return `New *`;
+    }
     if (minutes < 60) {
         return `${minutes} phút trước`;
     }
@@ -435,4 +444,5 @@ function getTimeDifference(timestamp) {
 
     const years = Math.floor(months / 12);
     return `${years} năm trước`;
+
 }
