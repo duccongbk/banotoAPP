@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scrollingText.style.visibility = 'hidden'; // Ẩn văn bản khi dừng cuộn
         }
     }
-    scrollText("321xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123");
+    scrollText("------- Xin chào đến với website banxeoto.site -----");
     Select.addEventListener('change', function () {
         // Lấy giá trị của option đã chọn
         const selectedValue = Select.value;
