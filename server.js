@@ -34,6 +34,8 @@ app.use(bodyParser.urlencoded({
 }))
 app.use('/public', express.static(path.join(__dirname, 'public')))
 adminRouter.use('/public', express.static(path.join(__dirname, 'public')))
+// app.use('/', adminRouter);
+
 adminRouter.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
@@ -118,6 +120,9 @@ app.get('/api', (req, res) => {
     res.json({ message: 'Data received successfully!' });
 });
 adminRouter.get('/v1', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/html/addCar.html'))
+});
+adminRouter.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/html/admin.html'))
 });
 app.put('/updateUser', (req, res, next) => {
@@ -307,7 +312,7 @@ app.post('/login', (req, res, next) => {
                         }
                         if (result.length > 0) {
                             // Nếu người dùng có vai trò là admin, chuyển hướng đến trang admin
-                            res.status(200).json({ token: token, redirectUrl: `http://${process.env.ADMIN_HOST}:3000/v1` });
+                            res.status(200).json({ token: token, redirectUrl: `http://${process.env.ADMIN_HOST}` });
                         } else {
                             // Nếu không phải là admin, chuyển hướng đến trang home
                             res.status(200).json({ token: token, redirectUrl: '/home' });

@@ -36,7 +36,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
     volumes:
-      - ./public/images:/app/public/images  
+      - ./public/images:/app/public/images
     ports:
       - "3000:3000"
     depends_on:
@@ -51,10 +51,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
-      - "8888:8888"  # Thêm cổng 8888 để Nginx lắng nghe
+      - "8888:8888" # Thêm cổng 8888 để Nginx lắng nghe
     depends_on:
       - banoto
       - phpmyadmin
-
 volumes:
   db_data:
